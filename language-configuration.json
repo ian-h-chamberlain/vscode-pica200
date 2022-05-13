@@ -1,0 +1,22 @@
+{
+  "autoClosingPairs": [
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "brackets": [
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "comments": {
+    "lineComment": ";"
+  },
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(.proc|.else|for|ifc|ifu)\\s.*",
+    "decreaseIndentPattern": "(.else|.end).*",
+  },
+  "wordPattern": "",
+  "surroundingPairs": [
+    ["[", "]"],
+    ["(", ")"]
+  ]
+}

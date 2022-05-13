@@ -1,0 +1,55 @@
+$schema: "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json"
+name: "Pica200"
+scopeName: "source.pica200"
+
+patterns:
+  - include: '#comment'
+  - include: '#directive'
+  - include: '#opcode'
+  - include: '#label'
+  - include: '#register'
+  - include: '#constant'
+
+  # TODO:
+  #   - proc names
+  #   - operands for cmp (eq, ne, etc.)
+  #   - boolean operators (&&, ||, !, etc)
+  #   - swizzling?
+  #   -
+
+repository:
+  comment:
+    patterns:
+      - name: comment.line.semicolon.pica
+        match: ';.*$'
+
+  # TODO: use 'support' instead of 'keyword' ? not sure...
+  directive:
+    patterns:
+    - name: keyword.directive.pica
+      match: '(?<=(^|\s)[.])(proc|else|end|alias|[fi]vec|bool|const(fa?|i)|in|out|entry|nodevle|gsh|set[fib])\b'
+
+  opcode:
+    patterns:
+    - name: keyword.opcode.pica
+      match: '(?<=(^|\s))(?<![.])(nop|end|emit|setemit|add|dp[34h]|dst|mul|sge|slt|max|min|ex2|lg2|litp|flr|rcp|rsq|mova?|cmp|call[cu]?|for|breakc?|if[cu]|jmp[cu]|mad)\b'
+
+  # TODO: maybe try entity or something to get special highlighting?
+  label:
+    patterns:
+      - name: variable.other.label.pica
+        match: '^\s*([a-zA-Z_][a-zA-Z0-9_$]*[:])\b'
+
+  # TODO: want to use 'storage' class, or have different classes for different register types?
+  # Like input registers could be 'parameter' but output registers something else?
+  register:
+    patterns:
+      - name: variable.parameter.register.pica
+        match: '\b([bvor]([0-9]|1[0-5])|c([0-8][0-9]?|9[0-5]?)|i[0-3]|a(01|[01L]))\b'
+
+  constant:
+    patterns:
+      - name: constant.numeric.float.pica
+        match: '\b([0-9]+[.][0-9]+)\b'
+      - name: constant.numeric.int.pica
+        match: '\b([0-9]+)\b'

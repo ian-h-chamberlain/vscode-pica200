@@ -1,0 +1,48 @@
+{
+  "name": "pica200",
+  "displayName": "pica200",
+  "description": "Syntax highlighting for the Pica200 shader language",
+  "version": "0.1.0",
+  "publisher": "ian-h-chamberlain",
+  "engines": {
+    "vscode": "^1.20.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "pica",
+        "aliases": [
+          "Pica200",
+          "pica",
+          "LSL"
+        ],
+        "extensions": [
+          ".pica",
+          ".pica200",
+          ".vsh",
+          ".gsh"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pica",
+        "scopeName": "source.pica200",
+        "path": "./syntaxes/pica.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "npx js-yaml syntaxes/pica.tmLanguage.yaml > syntaxes/pica.tmLanguage.json",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0",
+    "vsce": "^2.7.0"
+  }
+}
