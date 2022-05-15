@@ -36,6 +36,7 @@
       }
     ]
   },
+  "repository": "github:ian-h-chamberlain/vscode-pica200",
   "scripts": {
     "build": "npx js-yaml syntaxes/pica.tmLanguage.yaml > syntaxes/pica.tmLanguage.json",
     "package": "vsce package",

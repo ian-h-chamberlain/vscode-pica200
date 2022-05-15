@@ -9,10 +9,14 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Get Release
+        id: release
+        uses: bruceadams/get-release@v1.2.2
 
       - uses: actions/setup-node@v1
         with:
@@ -24,11 +28,19 @@ jobs:
       - run: npm run build && git diff --exit-code HEAD -- .
         name: Ensure generated files are up-to-date
 
-      - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@v1
+      - name: Upload extension to Github
+        uses: actions/upload-release-asset@v1
         with:
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          registryUrl: https://marketplace.visualstudio.com
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: pica200-${{ steps.release.outputs.tag_name }}.vsix
+          asset_name: pica200-${{ steps.release.outputs.tag_name }}.vsix
+          asset_content_type: application/vsix
+
+      - name: Publish extension to VSCode marketplace
+        run: npm run publish
+        env:
+          VSCE_PAT: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+
 
       # - name: Publish to Open VSX Registry
       #   uses: HaaLeo/publish-vscode-extension@v1
