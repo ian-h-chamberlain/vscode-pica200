@@ -32,13 +32,14 @@ jobs:
       - name: Package extension
         run: npm run package -- --out pica200-${{ steps.release.outputs.tag_name }}.vsix
 
-      - name: Upload extension to Github
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: pica200-${{ steps.release.outputs.tag_name }}.vsix
-          asset_name: pica200-${{ steps.release.outputs.tag_name }}.vsix
-          asset_content_type: application/vsix
+      # # Unmaintained: need to figure out alternative
+      # - name: Upload extension to Github
+      #   uses: actions/upload-release-asset@v1
+      #   with:
+      #     upload_url: ${{ steps.release.outputs.upload_url }}
+      #     asset_path: pica200-${{ steps.release.outputs.tag_name }}.vsix
+      #     asset_name: pica200-${{ steps.release.outputs.tag_name }}.vsix
+      #     asset_content_type: application/vsix
 
       - name: Publish extension to VSCode marketplace
         run: npm run publish
