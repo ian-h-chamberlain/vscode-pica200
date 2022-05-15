@@ -105,6 +105,12 @@ repository:
   constant:
     patterns:
       - name: constant.numeric.float.pica
-        match: '\b(-?[0-9]+[.][0-9]+)\b'
+        match: '(-)?\b([0-9]+[.][0-9]+)\b'
+        captures:
+          '1':
+            name: keyword.operator.negative
       - name: constant.numeric.int.pica
-        match: '\b(-?[0-9]+)\b'
+        match: '(-)?\b([0-9]+)\b'
+        captures:
+          '1':
+            name: keyword.operator.negative

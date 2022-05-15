@@ -1,3 +1,3 @@
 # Syntax Examples
 
-Take from <https://github.com/devkitPro/3ds-examples>.
+Taken from <https://github.com/devkitPro/3ds-examples>.
