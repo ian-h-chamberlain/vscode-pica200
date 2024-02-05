@@ -8,18 +8,15 @@ $comment: "DO NOT EDIT! @generated from pica.tmLanguage.yaml"
 patterns:
   - include: '#comment'
   - include: '#label'
+  - include: '#proc_directive'
   - include: '#directive'
   - include: '#opcode'
   - include: '#register'
   - include: '#alias_declaration'
-  - include: '#constant'
+  - include: '#expression'
 
   # TODO:
-  #   - proc/entry names as "functions"
-  #   - operands for cmp (eq, ne, etc.)
-  #   - boolean/bitwise operators (&&, ||, !, etc)
-  #   - int operators (+, -, *, / etc.)
-  #   - swizzling?
+  #   - special highlight for swizzling?
 
 repository:
   comment:
@@ -30,7 +27,22 @@ repository:
   directive:
     patterns:
     - name: keyword.control.directive.pica
-      match: '(?:^|\s)[.](proc|else|end|[fi]vec|bool|const(fa?|i)|entry|nodevle|gsh|set[fib])\b'
+      match: '(?:^|\s)[.](else|end|[fi]vec|bool|const(fa?|i)|entry|nodevle|gsh|set[fib])\b'
+
+  identifier:
+    patterns:
+      - match: &ident '[a-zA-Z0-9_$]+'
+
+  proc_directive:
+    patterns:
+      - match: '(?:^|\s)([.]proc)\s+(\S+)\b'
+        captures:
+          '1':
+            name: keyword.control.directive.proc.pica
+          '2':
+            patterns:
+              - match: *ident
+                name: entity.name.function.proc.pica
 
   opcode:
     patterns:
@@ -45,19 +57,10 @@ repository:
         patterns:
           - include: '#identifier'
 
-  # TODO: want to use 'storage' class, or have different classes for different register types?
-  # Like input registers could be 'parameter' but output registers something else?
-  # Also, do we want `support.variable` or `parameter`?
-  # Maybe `.in` / `.alias` declares a parameter, general-purpose registers can be either
-  # `storage` or `support`? Can we highlight `.out` somehow?
   register:
     patterns:
-      - name: support.variable.register.pica
+      - name: storage.register.pica
         match: '\b([bvor]([0-9]|1[0-5])|c([0-8][0-9]?|9[0-5]?)|i[0-3]|a(01|[01L]))\b'
-
-  identifier:
-    patterns:
-      - match: '[a-zA-Z0-9_$]+'
 
   alias_declaration:
     patterns:
@@ -67,8 +70,8 @@ repository:
             name: keyword.control.directive.alias.pica
           '2':
             patterns:
-              - include: '#identifier'
-                name: variable.other.alias.pica
+              - match: '[a-zA-Z0-9_$]+'
+                name: variable.parameter.alias.pica
           '3':
             patterns:
               - include: '#register'
@@ -78,7 +81,7 @@ repository:
             name: keyword.control.directive.in.pica
           '2':
             patterns:
-              - include: '#identifier'
+              - match: *ident
                 name: variable.parameter.alias.in.pica
           '3':
             patterns:
@@ -91,26 +94,29 @@ repository:
             patterns:
               - match: '-'
                 name: variable.language.out.noalias.pica
-              - match: '[^-]+'
+              - match: *ident
                 name: variable.parameter.alias.out.pica
-                # include: '#identifier'
           '3':
             patterns:
-              - match: 'pos(ition)?|normalquat|nquat|color|clr|t(ex)?coord(0w?|[12])|view|dummy'
+              - match: '\b(pos(ition)?|normalquat|nquat|color|clr|t(ex)?coord(0w?|1|2)|view|dummy)\b'
                 name: support.type.property-name.out.pica
           '4':
             patterns:
               - include: '#register'
 
+  expression:
+    patterns:
+      - match: '(?:\b|\s)(\+|\*|\-|/|\&\&|\|\||\!)(?:\b|\s)'
+        captures:
+          '1':
+            name: keyword.operator.pica
+      - match: '\b(eq|ne|lt|le|gt|ge)\b'
+        name: keyword.operator.comparison.pica
+      - include: '#constant'
+
   constant:
     patterns:
       - name: constant.numeric.float.pica
-        match: '(-)?\b([0-9]+[.][0-9]+)\b'
-        captures:
-          '1':
-            name: keyword.operator.negative
+        match: '\b([0-9]+[.][0-9]+)\b'
       - name: constant.numeric.int.pica
-        match: '(-)?\b([0-9]+)\b'
-        captures:
-          '1':
-            name: keyword.operator.negative
+        match: '\b([0-9]+)\b'
