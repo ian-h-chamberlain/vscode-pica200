@@ -11,8 +11,8 @@
     "lineComment": ";"
   },
   "indentationRules": {
-    "increaseIndentPattern": ".proc|.else|for|ifc|ifu",
-    "decreaseIndentPattern": ".else|.end",
+    "increaseIndentPattern": "^\\s*(?:\\.proc|\\.else|for|ifc|ifu)",
+    "decreaseIndentPattern": "^\\s*(?:\\.else|\\.end)",
   },
   "wordPattern": "",
   "surroundingPairs": [
